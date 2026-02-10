@@ -6,6 +6,10 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Token Cost',
+      logo: {
+        src: './src/assets/tokencost-logo.png',
+        alt: 'Token Cost',
+      },
       social: [
         {
           icon: 'github',
