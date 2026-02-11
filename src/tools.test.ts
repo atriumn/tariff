@@ -107,6 +107,7 @@ describe("executeTool", () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -314,7 +315,7 @@ describe("executeTool", () => {
 
     it("calls refreshPrices from pricing module", async () => {
       await executeTool("refresh_prices", {});
-      expect(refreshPrices).toHaveBeenCalledOnce();
+      expect(refreshPrices).toHaveBeenCalledTimes(1);
     });
   });
 
