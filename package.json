@@ -25,7 +25,7 @@
     "mcp",
     "llm",
     "pricing",
-    "tariff",
+    "tokencost",
     "claude",
     "openai",
     "litellm"
