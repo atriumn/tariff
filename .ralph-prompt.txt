@@ -1,20 +1,19 @@
 Implement this issue fully per the requirements.
 
-## Issue #12: Normalize provider prefixes in fuzzy matching
+## Issue #13: Handle fine-tuned model name patterns
 
 ## Summary
-Users often reference models with provider prefixes like `azure/gpt-4o`, `bedrock/anthropic.claude-3`, `vertex_ai/gemini-pro`, `openrouter/anthropic/claude-3`. Our fuzzy matching should strip these prefixes before attempting a match.
+Fine-tuned OpenAI models use the format `ft:gpt-4o:my-org:custom_suffix:id`. We should strip these down to the base model for pricing lookup.
 
 ## Changes
-- **search.ts**: Add prefix stripping logic before fuzzy match
-- Handle known prefixes: `azure/`, `bedrock/`, `vertex_ai/`, `vertex_ai_beta/`, `openrouter/`, `together_ai/`, `fireworks_ai/`
-- Should work in both `get_model_details` and `calculate_estimate`
-- Add tests for prefix-stripped matching
+- **search.ts**: Detect `ft:` prefix and extract base model name before matching
+- Return a note in the output that pricing is based on the base model
+- Add tests for fine-tuned model name patterns
 
 ## Context
-AgentOps/tokencost handles this via provider prefix normalization. Users copying model names from their API configs shouldn't have to manually strip these.
+AgentOps/tokencost handles this already. Users with fine-tuned models should get base model pricing rather than a "model not found" error.
 
-Implement all requirements from the above issue(s). Reference: #12
+Implement all requirements from the above issue(s). Reference: #13
 
 
 **MANDATORY BEFORE OUTPUTTING LOOP_COMPLETE:**
@@ -27,7 +26,7 @@ Implement all requirements from the above issue(s). Reference: #12
 4. Run typecheck: `pnpm --filter web exec tsc --noEmit` — must pass
 5. Run `git status` — working tree must be clean (all changes committed)
 6. Run `git log --oneline -5` — must show commits YOU authored on this branch
-7. Run `/home/jeff/projects/alloy/shared/scripts/ralph-review.sh --worktree /home/jeff/projects/worktrees/tariff-12 --issue 12 --project tariff`
+7. Run `/home/jeff/projects/alloy/shared/scripts/ralph-review.sh --worktree /home/jeff/projects/worktrees/tariff-13 --issue 13 --project tariff`
    - If it prints PASS — you are clear to output LOOP_COMPLETE
    - If it prints BLOCKING — fix every listed issue, re-commit, then re-run the review
    - If it prints ERROR — ignore and proceed (review service unavailable)

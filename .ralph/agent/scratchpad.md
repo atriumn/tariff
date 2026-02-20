@@ -1,44 +1,33 @@
-# Issue #12: Normalize provider prefixes in fuzzy matching
+# Issue #13: Handle fine-tuned model name patterns
 
-## Objective
-Strip known provider prefixes from model names before fuzzy matching so users can pass model names like `azure/gpt-4o`, `bedrock/anthropic.claude-3`, etc., and they'll still match correctly.
+## COMPLETED ✅
 
-## Implementation Plan
+### What was implemented:
 
-### 1. Update search.ts
-- Add `stripProviderPrefix()` function that removes known prefixes:
-  - `azure/`, `bedrock/`, `vertex_ai/`, `vertex_ai_beta/`, `openrouter/`, `together_ai/`, `fireworks_ai/`
-- Call this in both `fuzzyMatch()` and `fuzzyMatchMultiple()` before matching
+**search.ts changes:**
+- Added `extractFineTunedBase()` function to detect and extract base model from `ft:base-model:org:suffix:id` patterns
+- Created `SearchResult` interface and `fuzzyMatchWithMetadata()` to track fine-tuned status
+- Updated `fuzzyMatch()` and `fuzzyMatchMultiple()` to handle ft: patterns after provider prefix stripping
 
-### 2. Add tests to search.test.ts
-- Test cases for each prefix being stripped correctly
-- Test that matching still works after prefix stripping
+**tools.ts changes:**
+- Updated `get_model_details` tool to use `fuzzyMatchWithMetadata()` and return note about base model pricing
+- Updated `calculate_estimate` tool to display note when using base model for fine-tuned model pricing
 
-### 3. Verify through tools.ts
-- `get_model_details` and `calculate_estimate` both use `fuzzyMatch()`, so they'll automatically benefit from the change
-
-## Progress
-- [x] Implement stripProviderPrefix in search.ts
-- [x] Add tests to search.test.ts
-- [x] Run tests and verify (ALL 84 TESTS PASS including 10 new prefix tests)
-- [x] Commit changes (2 commits)
-- [x] Verify build passes
-- [x] Final review passed (PASS)
-
-## Implementation Summary
-
-### Changes Made:
-1. Added `stripProviderPrefix()` function to handle 7 known provider prefixes
-2. Integrated prefix stripping in `fuzzyMatch()` - affects both `get_model_details` and `calculate_estimate`
-3. Integrated prefix stripping in `fuzzyMatchMultiple()`
-4. Added 10 comprehensive tests covering all prefixes and case-insensitivity
-5. Fixed prefix ordering to handle overlapping prefixes (vertex_ai/vertex_ai_beta)
-
-### Commits:
-- `2593254` - feat: normalize provider prefixes in fuzzy matching
-- `488e33e` - fix: order KNOWN_PREFIXES by length to avoid partial matches
+**Tests added (search.test.ts):**
+- Test extracting base model from standard ft: pattern
+- Test fine-tuned pattern with different base models
+- Test metadata tracking of fine-tuned status
+- Test metadata with non-fine-tuned models
+- Test combination with provider prefixes (e.g., `azure/ft:gpt-4o:...`)
+- Test case-insensitive handling
+- Test fuzzyMatchMultiple with ft: patterns
+- Test null return for invalid patterns
 
 ### Verification:
-- ✓ 84 tests pass (including 10 new tests)
-- ✓ Build passes
-- ✓ Review passed (all blocking issues resolved)
+- ✅ All 92 tests pass (34 new/updated in search.test.ts)
+- ✅ TypeScript build succeeds
+- ✅ Code committed with proper commit message
+- ✅ Ralph review: PASS
+- ✅ Git log shows feat commit
+
+The implementation correctly handles OpenAI fine-tuned model format while preserving base model pricing lookup.
