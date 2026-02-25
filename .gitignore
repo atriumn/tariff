@@ -6,3 +6,5 @@ coverage/
 .vercel
 .ralph/
 .ralph-*
+.DS_Store
+demo.cast
