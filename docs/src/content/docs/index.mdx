@@ -17,6 +17,10 @@ hero:
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
+## See it in action
+
+![tokencost demo — ask pricing questions in natural language and get instant answers](/tokencost-dev.gif)
+
 ## Install
 
 Add to your Claude Code config in one command:
@@ -25,7 +29,7 @@ Add to your Claude Code config in one command:
 claude mcp add tokencost-dev -- npx -y tokencost-dev
 ```
 
-Or add the JSON config manually — see the [Getting Started](/getting-started/) guide.
+Or add the JSON config manually — see the [Getting Started](/getting-started/) guide for VS Code, Cursor, Windsurf, and more.
 
 ## What can it do?
 
@@ -43,3 +47,16 @@ Or add the JSON config manually — see the [Getting Started](/getting-started/)
     Pricing data sourced from the LiteLLM community registry, cached for 24 hours with on-demand refresh.
   </Card>
 </CardGrid>
+
+## Example: batch cost planning
+
+> "How much would it cost to run Claude Opus vs Sonnet for 10K requests, averaging 2K input and 500 output tokens each?"
+
+```
+Claude Opus 4.6:   $450.00  (Input: $300 + Output: $150)
+Claude Sonnet 4.6: $135.00  (Input: $60  + Output: $75)
+```
+
+Sonnet is 3.3x cheaper — saving $315 per 10K-request batch.
+
+[See more examples &rarr;](/examples/)
