@@ -2,7 +2,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname =
+  typeof import.meta?.url === "string" ? dirname(fileURLToPath(import.meta.url)) : process.cwd();
 const CACHE_DIR = join(__dirname, "..", ".cache");
 const CACHE_FILE = join(CACHE_DIR, "prices.json");
 const SOURCE_URL =
