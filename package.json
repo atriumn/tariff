@@ -58,7 +58,7 @@
   "engines": {
     "node": ">=18"
   },
-  "mcpName": "io.github.atriumn/tokencost-dev",
+  "mcpName": "io.github.jeff-atriumn/tokencost-dev",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
