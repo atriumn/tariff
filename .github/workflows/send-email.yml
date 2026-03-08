@@ -1,0 +1,29 @@
+name: Send Email
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Extract version
+        id: version
+        run: echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Send email
+        uses: atriumn/cryyer/.github/actions/send-file@v0
+        with:
+          product: tokencost
+          draft-path: drafts/v${{ steps.version.outputs.value }}.md
+          from-email: ${{ secrets.FROM_EMAIL }}
+          email-api-key: ${{ secrets.RESEND_API_KEY }}
+          subscriber-store: gist
+          github-gist-id: ${{ secrets.SUBSCRIBERS_GIST_ID }}
+          github-token: ${{ secrets.RELEASE_PLEASE_TOKEN }}

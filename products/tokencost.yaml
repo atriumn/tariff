@@ -1,0 +1,11 @@
+id: tokencost
+name: tokencost
+repo: atriumn/tokencost-dev
+tagline: LLM Pricing Oracle — real model pricing data via MCP
+voice: >
+  Concise and developer-friendly. Lead with what changed and why it matters.
+  Skip marketing fluff — our audience is technical users who integrate tokencost
+  into their AI workflows. Use plain language, short paragraphs, and bullet points.
+emailSubjectTemplate: "tokencost {{version}} — what's new"
+from_name: tokencost
+reply_to: jeff@atriumn.com

@@ -1,0 +1,44 @@
+name: Draft Email
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [main]
+
+jobs:
+  draft:
+    if: startsWith(github.head_ref, 'release-please--')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Extract version from PR branch
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Generate draft
+        uses: atriumn/cryyer/.github/actions/draft-file@v0
+        id: draft
+        with:
+          product: tokencost
+          version: ${{ steps.version.outputs.value }}
+          llm-provider: gemini
+          llm-model: gemini-3-flash-preview
+          llm-api-key: ${{ secrets.GEMINI_API_KEY }}
+
+      - name: Commit draft
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add drafts/
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: draft email for v${{ steps.version.outputs.value }}"
+          git push
